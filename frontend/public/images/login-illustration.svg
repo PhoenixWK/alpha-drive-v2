@@ -1,0 +1,32 @@
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background elements -->
+  <circle cx="200" cy="200" r="120" fill="#F5F7FF" />
+  
+  <!-- Person's body -->
+  <path d="M153 209C153 209 179 236 181 296C181 296 228 306 264 296C264 296 267 202 294 201" stroke="#344767" stroke-width="20" stroke-linecap="round"/>
+  
+  <!-- Person's head -->
+  <circle cx="220" cy="160" r="30" fill="#FCD2B3" stroke="#344767" stroke-width="4"/>
+  <path d="M210 155C210 155 218 163 230 155" stroke="#344767" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Person's ear -->
+  <path d="M248 163C248 163 255 158 255 168C255 178 248 175 248 175" stroke="#344767" stroke-width="3" fill="#FCD2B3"/>
+  
+  <!-- Person's hair -->
+  <path d="M200 145C200 145 190 135 210 125C230 115 250 125 245 145" stroke="#344767" stroke-width="8" stroke-linecap="round"/>
+  
+  <!-- Person's legs -->
+  <path d="M181 296L165 400" stroke="#344767" stroke-width="20" stroke-linecap="round"/>
+  <path d="M264 296L280 400" stroke="#344767" stroke-width="20" stroke-linecap="round"/>
+  
+  <!-- Person's feet -->
+  <path d="M145 400H185" stroke="#344767" stroke-width="12" stroke-linecap="round"/>
+  <path d="M260 400H300" stroke="#344767" stroke-width="12" stroke-linecap="round"/>
+  
+  <!-- Person's arm holding a device -->
+  <path d="M153 209C153 209 120 250 80 230" stroke="#344767" stroke-width="18" stroke-linecap="round"/>
+  
+  <!-- Device -->
+  <rect x="59" y="215" width="50" height="30" rx="4" fill="#6C5DD3" stroke="#344767" stroke-width="4"/>
+  <rect x="64" y="220" width="40" height="20" rx="2" fill="white" stroke="#344767" stroke-width="1"/>
+</svg> 
