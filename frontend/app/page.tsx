@@ -1,6 +1,8 @@
 import PageLayout from "@/components/PageLayout";
 
-export default function Home() {
+
+export default async function Home() {
+
   return (
     <PageLayout>
       Home

@@ -4,10 +4,16 @@ import { Button } from "./ui/button";
 import Image from "next/image";
 import localFont from "next/font/local";
 import { IoMenu } from "react-icons/io5";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import SwitchThemeBtn from "./SwitchThemeBtn";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
+import { User } from "@supabase/supabase-js";
+import UserProfileMenu from "./user-profile/UserProfileMenu";
+import { getUserService } from "@/service/UserServices";
+
 
 const righteousFont = localFont({
     src: "../public/fonts/Righteous-Regular.ttf",
@@ -15,7 +21,16 @@ const righteousFont = localFont({
 
 export default function Header() {
 
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+    const [user, setUser] = useState<User | null>(null);
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const user = await getUserService();
+            setUser(user);
+        }
+        fetchUser();
+    }, [])
 
     return (
         <>
@@ -67,15 +82,19 @@ export default function Header() {
                     <div className="xl:hidden">
                         <SwitchThemeBtn />
                     </div>
-                    <button 
-                        onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                            e.preventDefault();
-                        }}
-                        className="bg-[#6A4BFF] text-white px-6 py-4 font-semibold rounded-md cursor-pointer hover:bg-[#573FDB]/75 transition-all ease-in-out duration-300">
-                        <Link href="/login-page">
-                            Sign in
-                        </Link>
-                    </button>
+                    {user ? (
+                        <UserProfileMenu user={user} />
+                    ) : (
+                        <button 
+                            onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                                e.preventDefault();
+                            }}
+                            className="bg-[#6A4BFF] text-white px-6 py-4 font-semibold rounded-md cursor-pointer hover:bg-[#573FDB]/75 transition-all ease-in-out duration-300">
+                            <Link href="/login-page">
+                                Sign in
+                            </Link>
+                        </button>
+                    )}
                 </div>
             </header>
         </>

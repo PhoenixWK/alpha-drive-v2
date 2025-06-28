@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import LoginForm from "@/components/auth-form/LoginForm";
+import LoginForm from "@/components/authentication/LoginForm";
 import localFont from "next/font/local";
-import SignupForm from "@/components/auth-form/SignupPage";
+import SignupForm from "@/components/authentication/SignupPage";
 
 const righteousFont = localFont({
   src: "../../../public/fonts/Righteous-Regular.ttf",

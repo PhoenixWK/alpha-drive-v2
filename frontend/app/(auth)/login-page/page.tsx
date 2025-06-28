@@ -1,8 +1,7 @@
 
-
 import Link from "next/link";
 import Image from "next/image";
-import LoginForm from "@/components/auth-form/LoginForm";
+import LoginForm from "@/components/authentication/LoginForm";
 import localFont from "next/font/local";
 
 const righteousFont = localFont({
@@ -10,8 +9,8 @@ const righteousFont = localFont({
 });
 
 
-export default function LoginPage() {
-  
+export default async function LoginPage() {
+
   return (
     <div className="flex min-h-screen dark:bg-[#171725]">
       <div className="hidden lg:flex lg:w-1/2 items-center justify-center bg-[#FBFAFF] dark:bg-[#19192C]">
@@ -22,6 +21,10 @@ export default function LoginPage() {
             width={400} 
             height={400}
             priority
+            placeholder="blur"
+            blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+PC9zdmc+"
+            sizes="(max-width: 1024px) 0px, 400px"
+            className="max-w-full h-auto"
           />
         </div>
       </div>
