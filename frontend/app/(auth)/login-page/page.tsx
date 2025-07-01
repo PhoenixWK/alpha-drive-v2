@@ -3,13 +3,14 @@ import Link from "next/link";
 import Image from "next/image";
 import LoginForm from "@/components/authentication/LoginForm";
 import localFont from "next/font/local";
+import { Suspense } from "react";
 
 const righteousFont = localFont({
   src: "../../../public/fonts/Righteous-Regular.ttf",
 });
 
 
-export default async function LoginPage() {
+export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen dark:bg-[#171725]">
@@ -43,6 +44,7 @@ export default async function LoginPage() {
           </Link>
         </div>
         <div className="max-w-md mx-auto w-full">
+
           <div className="mb-8">
             <h1 className="text-2xl md:text-3xl font-bold text-[#364670] dark:text-white mb-2">
               Sign in to your account

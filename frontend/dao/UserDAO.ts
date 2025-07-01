@@ -3,6 +3,37 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
+
+export async function signInWithEmailAndPassword(email: string, password: string) {
+    const supabase = await createClient();
+
+    try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password,
+        });
+        
+        if(data.user?.confirmed_at === null) {
+            return { error: "Please confirm your email address before logging in." };
+        }
+
+        if (error) {
+            console.error('Login error:', error);
+            return { error: error.message };
+        }
+
+        if (data.user) {
+            console.log('User logged in successfully:');
+            return { success: true, user: data.user };
+        }
+
+        return { error: "Failed to log in" };
+    } catch (error) {
+        console.error('Unexpected login error:', error);
+        return { error: "An unexpected error occurred" };
+    }
+}
+
 export async function signInWithGoogle() {
     const supabase = await createClient();
     
@@ -28,6 +59,35 @@ export async function signInWithGoogle() {
     }
 
     return { data, error };
+}
+
+export async function signUp(email: string, password: string) {
+    const supabase = await createClient();
+
+    try {
+        const { data, error } = await supabase.auth.signUp({
+            email: email,
+            password: password,
+            options: {
+                emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}`
+            }
+        });
+
+        if (error) {
+            console.error('Signup error:', error);
+            return { error: error.message };
+        }
+
+        if (data.user) {
+            console.log('User signed up successfully:', data.user);
+            return { success: true, user: data.user };
+        }
+
+        return { error: "Failed to create user" };
+    } catch (error) {
+        console.error('Unexpected signup error:', error);
+        return { error: "An unexpected error occurred" };
+    }
 }
 
 export async function logout() {

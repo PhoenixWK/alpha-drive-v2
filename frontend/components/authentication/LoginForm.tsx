@@ -1,47 +1,39 @@
 "use client";
 
 import Link from "next/link";
-import { redirect, useRouter, useSearchParams } from "next/navigation";
-import { useActionState, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "@/components/ui/button";
 
 import { Eye, EyeOff } from "lucide-react";
 import GoogleButton from "./GoogleButton";
-import { createClient } from "@/lib/supabase/server";
+import { signInWithEmailAndPasswordService } from "@/service/UserServices";
 
 export default function LoginForm() {
 
-    // const [state, formAction, pending] = useActionState(loginAction, null);
     const [showModal, setShowModal] = useState(false);
-    const [success, setSuccess] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const [authError, setAuthError] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [authResponse, setAuthResponse] = useState<{success?: boolean, error?: string, redirecTo?: string} | null>(null);
     const router = useRouter();
     const searchParams = useSearchParams();
     
-    // useEffect(() => {
-    //     if (state?.error) {
-    //         setShowModal(true);
-    //     }
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setIsLoading(true);
 
-    //     if(state?.success) {
-    //         setSuccess(true);
-    //         setShowModal(true);
-    //         setTimeout(() => {
-    //             setShowModal(false);
-    //             //router.push(`/user-profile/${state.userName}`);
-    //         }, 2000);
-    //     }
-        
-    // }, [state/*, router*/]);
-    useEffect(() => {
-        const fetchUser = async () => {
-           const supabase = await createClient();
-           const { data: { user } } = await supabase.auth.getUser();
-            if (user) {redirect("/");}
+        const formData = new FormData(e.currentTarget);
+        const result = await signInWithEmailAndPasswordService(formData);
+
+        if (result?.error) {
+            setAuthResponse(result);
+            setIsLoading(false);
+            setShowModal(true);
+        } else if (result?.success && result?.redirectTo) {
+            router.push(result.redirectTo);
         }
-    }, []);
+    };
 
     useEffect(() => {
         // Check for authentication errors from URL params
@@ -49,33 +41,27 @@ export default function LoginForm() {
         if (error) {
             switch (error) {
                 case 'auth_failed':
-                    setAuthError('Authentication failed. Please try again.');
+                    setAuthResponse({error: 'Authentication failed. Please try again.'});
                     break;
                 case 'no_code':
-                    setAuthError('Authentication was cancelled or incomplete.');
+                    setAuthResponse({error: 'Authentication was cancelled or incomplete.'});
                     break;
                 default:
-                    setAuthError('An authentication error occurred.');
+                    setAuthResponse({error: 'An authentication error occurred.'});
             }
             
             // Clear the error from URL after a few seconds
             setTimeout(() => {
-                setAuthError(null);
+                setAuthResponse(null);
                 router.replace('/login-page');
             }, 5000);
         }
     }, [searchParams, router]);
         // This effect can be used to handle side effects after the component mounts
-    
-  
+
     return (
         <div>
-            {authError && (
-                <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md">
-                    <p className="text-red-700 text-sm">{authError}</p>
-                </div>
-            )}
-            <form className="space-y-5">
+            <form className="space-y-5" onSubmit={handleSubmit}>
                 <div className="space-y-2">
                     <label htmlFor="email" className="block text-[#364670] dark:text-white font-semibold">
                         Email
@@ -99,13 +85,13 @@ export default function LoginForm() {
                             type={showPassword ? "text" : "password"}
                             placeholder="Password"
                             className="w-full px-4 py-3 dark:bg-[#1D2335] dark:text-white rounded-md border-2 dark:border-0 focus:border-[#6A4BFF] focus:ring-0 focus:ring-offset-0"
-                            />
+                        />
                             <button
-                            type="button"
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#364670]"
-                            onClick={() => setShowPassword(!showPassword)}
-                        >
-                            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                type="button"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#364670]"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                         </button>
                     </div>
                 </div>
@@ -126,27 +112,32 @@ export default function LoginForm() {
                         </Link>
                     </div>
                 </div>
-                <Button type="submit" className="w-full py-3 h-12 bg-[#6A4BFF] hover:bg-[#6A4BFF]/75 text-white font-semibold">
+                <Button 
+                    type="submit" 
+                    className="w-full py-3 h-12 bg-[#6A4BFF] hover:bg-[#6A4BFF]/75 text-white font-semibold"
+                    disabled={isLoading}    
+                >
                     Sign in
                 </Button>
                 <GoogleButton />
             </form>
-            {/* {showModal && createPortal(
+            {showModal && createPortal(
                 <div className="fixed p-4 inset-0 flex items-center justify-center z-50">
                     <div 
                         className="absolute inset-0 bg-black/75" 
                         onClick={() => setShowModal(false)}
                     ></div>
-                    <div className={`${success ? "bg-[#E44C89]" : " bg-[#824CE4]"} p-6 rounded-lg shadow-lg z-10 max-w-md w-full`}>
+                    <div className="bg-[#E44C89] p-6 rounded-lg shadow-lg z-10 max-w-md w-full">
                         <div className="flex flex-col items-center gap-2">
-                            <h2 className={`${success ? "text-[#AE0261]" : "  text-[#4808BF]"} text-4xl font-bold text-center`}>
-                                {success ? "Login successful!" : state?.error}
+                            <h2 className="text-[#AE0261] text-4xl font-bold text-center">
+                                {authResponse?.error ? 'Error' : 'Success'}
                             </h2>
-                            {state?.error && (
-                                <p className="text-[#4801CD] text-lg font-semibold text-center">{state?.error}</p>
-                            )}
+                            <p className="text-[#4801CD] text-lg font-semibold text-center">{authResponse?.error}</p>
                             <button 
-                                onClick={() => setShowModal(false)}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    setShowModal(false)
+                                }}
                                 className="px-4 py-2 bg-transparent text-white cursor-pointer"
                             >
                                 Close
@@ -155,7 +146,7 @@ export default function LoginForm() {
                     </div>
                 </div>,
                 document.body
-            )} */}
+            )}
         </div>
     );
 } 
