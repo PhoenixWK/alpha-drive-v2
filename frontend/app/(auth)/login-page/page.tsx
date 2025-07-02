@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import LoginForm from "@/components/authentication/LoginForm";
 import localFont from "next/font/local";
-import { Suspense } from "react";
+
 
 const righteousFont = localFont({
   src: "../../../public/fonts/Righteous-Regular.ttf",

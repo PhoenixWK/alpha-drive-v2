@@ -8,8 +8,6 @@ import { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import SwitchThemeBtn from "./SwitchThemeBtn";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
 import { User } from "@supabase/supabase-js";
 import UserProfileMenu from "./user-profile/UserProfileMenu";
 import { getUserService } from "@/service/UserServices";
