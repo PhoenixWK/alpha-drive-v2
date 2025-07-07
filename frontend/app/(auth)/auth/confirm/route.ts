@@ -22,6 +22,7 @@ export async function GET(request: NextRequest) {
       if (!error) {
         console.log('Email verification successful')
         // Redirect to login page after successful verification
+        // User profile creation will be handled in LoginForm after login
         redirect(next)
       } else {
         console.error('Email verification error:', error)

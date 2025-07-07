@@ -12,6 +12,7 @@ export async function GET(request: Request) {
     
     if (!error) {
       // Successfully authenticated, redirect to home page
+      // User profile creation will be handled in LoginForm or when user logs in
       return NextResponse.redirect(`${origin}/`)
     } else {
       console.error('Error exchanging code for session:', error)

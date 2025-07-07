@@ -73,7 +73,7 @@ export default function UpdatePasswordForm() {
                     />
                     {errorField?.field_error === "password" && (
                         <p className="text-red-500 text-sm font-semibold mt-1">
-                            Password must be at least 10 characters long, contain at least one uppercase letter, one lowercase letter, and one number.
+                            Password must be at least 10 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.
                         </p>
                     )}
                 </div>

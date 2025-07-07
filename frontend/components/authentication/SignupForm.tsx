@@ -104,7 +104,7 @@ export default function SignupForm() {
                     />
                     {errorField?.field_error === "password" && (
                         <p className="text-red-500 text-sm font-semibold mt-1">
-                            Password must be at least 10 characters long, contain at least one uppercase letter, one lowercase letter, and one number.
+                            Password must be at least 10 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.
                         </p>
                     )}
                 </div>
@@ -124,7 +124,7 @@ export default function SignupForm() {
                         }`}
                         required
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            const confirmPassword: string = e.target.value;
+                            let confirmPassword: string = e.target.value;
                             if(!validateConfirmPassword(confirmPassword, password)) {
                                 setErrorField({ field_error: "confirm_password" });
                             }else {

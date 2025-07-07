@@ -1,7 +1,7 @@
 'use server'
 
-import { getUser, logout, resetPasswordForEmail, signInWithEmailAndPassword, signInWithGoogle, signUp, updateUserPassword } from "@/dao/UserDAO";
-import { redirect } from "next/dist/server/api-utils";
+import { checkExistingUserProfile, createDefaultUserProfile, getUser, getUserSession, logout, resetPasswordForEmail, signInWithEmailAndPassword, signInWithGoogle, signUp, updateUserPassword } from "@/dao/UserDAO";
+import { get } from "http";
 
 
 export async function signInWithEmailAndPasswordService(formData: FormData) {
@@ -23,8 +23,7 @@ export async function signInWithEmailAndPasswordService(formData: FormData) {
         if (result?.success) {
             // Return success with redirect URL instead of redirecting
             return { 
-                success: result.success, 
-                redirectTo: '/' 
+                success: result.success,  
             };
         }
 
@@ -127,4 +126,50 @@ export default async function updateUserPasswordService(formData: FormData) {
 
 export async function getUserService() {
     return await getUser();
+}
+
+export async function createDefaultUserProfileService() {
+    const user = await getUser() 
+
+    if(!user) {
+        return { error: "User not found. Please log in." };
+    }
+
+    try {
+        const checkExistingUserProfileResponse = await checkExistingUserProfile(user.id);
+        const existingProfile = checkExistingUserProfileResponse.data;
+
+        // If there's an error and it's not "not found", return error
+        if (checkExistingUserProfileResponse.error && checkExistingUserProfileResponse.error.code !== 'PGRST116') {
+            console.log('Error checking existing profile:', checkExistingUserProfileResponse.error);
+            return { error: "An error occurred while checking your profile." };
+        }
+        
+        // If profile exists, return success
+        if(existingProfile) {
+            return { 
+                success: true,
+                isExistingProfile: true,
+                message: "Profile already exists." 
+            };
+        }
+        
+        // Create new profile
+        const newDefaultUserProfile = await createDefaultUserProfile(user.id, user.email as string);
+
+        if( newDefaultUserProfile.error ) {
+            console.log('Error creating profile:', newDefaultUserProfile.error);
+            return { error: "An error occurred while creating your profile." };
+        }
+
+        console.log('Profile created successfully for user:', user.id);
+        return { 
+            success: true,
+            isExistingProfile: false,
+            message: "Profile created successfully.", 
+        };
+    } catch (error) {
+        console.error('Unexpected error in createDefaultUserProfileService:', error);
+        return { error: "An unexpected error occurred while setting up your profile." };
+    }
 }

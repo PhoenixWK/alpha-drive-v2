@@ -4,7 +4,12 @@ export function validateEmail(email: string): boolean {
 }
 
 export function validatePassword(password: string): boolean {
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{10,}$/;
+    // Password must be at least 10 characters long and contain:
+    // - At least one lowercase letter
+    // - At least one uppercase letter  
+    // - At least one number
+    // - At least one special character (!@#$%^&*()_+-=[]{}|;:,.<>?)
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{}|;:,.<>?])[a-zA-Z\d!@#$%^&*()_+\-=\[\]{}|;:,.<>?]{10,}$/;
     return passwordRegex.test(password);
 }
 

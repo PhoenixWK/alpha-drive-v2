@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {  useState } from "react";
 import { Button } from "@/components/ui/button";
 
 import { Eye, EyeOff } from "lucide-react";
 import GoogleButton from "./GoogleButton";
-import { signInWithEmailAndPasswordService } from "@/service/UserServices";
+import { createDefaultUserProfileService, signInWithEmailAndPasswordService } from "@/service/UserServices";
 import { Toast, ToastContainer } from "../ui/toast";
 import { useToast } from "@/hooks/useToast";
 
@@ -18,7 +18,6 @@ export default function LoginForm() {
     const { toast, showError, showSuccess, removeToast } = useToast();
     const router = useRouter();
 
-    
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsLoading(true);
@@ -29,11 +28,29 @@ export default function LoginForm() {
         if (result?.error) {
             showError(result.error || "An error occurred during login.", 4000);
             setIsLoading(false);
-        } else if (result?.success && result?.redirectTo) {
-            showSuccess("Login successful!");
-            router.push(result.redirectTo);
-        }
+            return; // Return early on error
+        } 
 
+        // Only create profile after successful login
+        try {
+            const response = await createDefaultUserProfileService();
+            
+            if (response?.error) {
+                showError(response.error, 4000);
+            } else if (response?.success) {
+                if (response.isExistingProfile) {
+                    showSuccess("Welcome back!", 3000);
+                } else {
+                    showSuccess("Profile created successfully! Welcome!", 3000);
+                }
+            }
+        } catch (error) {
+            console.error('Profile creation error:', error);
+            showError("Profile setup failed, but login was successful.", 4000);
+        }
+        
+        setIsLoading(false);
+        router.push("/"); 
     };
 
     return (
