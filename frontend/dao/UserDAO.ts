@@ -29,32 +29,6 @@ export async function signInWithEmailAndPassword(email: string, password: string
         return { error: "Failed to log in" };
 }
 
-export async function signInWithGoogle() {
-    const supabase = await createClient();
-    
-    const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-            redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/auth/callback`,
-            queryParams: {
-                access_type: 'offline',
-                prompt: 'consent',
-            },
-        },
-    });
-
-    if (error) {
-        console.error('OAuth error:', error);
-        return { error };
-    }
-
-    // Redirect to the OAuth URL
-    if (data.url) {
-        redirect(data.url);
-    }
-
-    return { data, error };
-}
 
 export async function signUp(email: string, password: string) {
     const supabase = await createClient();

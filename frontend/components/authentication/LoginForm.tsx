@@ -6,7 +6,6 @@ import {  useState } from "react";
 import { Button } from "@/components/ui/button";
 
 import { Eye, EyeOff } from "lucide-react";
-import GoogleButton from "./GoogleButton";
 import { createDefaultUserProfileService, signInWithEmailAndPasswordService } from "@/service/UserServices";
 import { Toast, ToastContainer } from "../ui/toast";
 import { useToast } from "@/hooks/useToast";
@@ -113,7 +112,6 @@ export default function LoginForm() {
                 >
                     Sign in
                 </Button>
-                <GoogleButton />
             </form>
         </>        
     );

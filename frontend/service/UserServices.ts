@@ -1,7 +1,6 @@
 'use server'
 
-import { checkExistingUserProfile, createDefaultUserProfile, getUser, getUserSession, logout, resetPasswordForEmail, signInWithEmailAndPassword, signInWithGoogle, signUp, updateUserPassword } from "@/dao/UserDAO";
-import { get } from "http";
+import { checkExistingUserProfile, createDefaultUserProfile, getUser, logout, resetPasswordForEmail, signInWithEmailAndPassword, signUp, updateUserPassword } from "@/dao/UserDAO";
 
 
 export async function signInWithEmailAndPasswordService(formData: FormData) {
@@ -34,9 +33,6 @@ export async function signInWithEmailAndPasswordService(formData: FormData) {
     }
 }
 
-export async function signInWithGoogleService(){
-    return await signInWithGoogle();
-}
 
 export async function signUpService(formData: FormData) {
     const email = formData.get("email") as string;
