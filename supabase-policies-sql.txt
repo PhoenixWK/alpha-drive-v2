@@ -139,7 +139,11 @@ using (
   exists (
     select 1 
     from user_profile
-    where (user_id=auth.uid() and role='user')
+    where (
+      user_profile.user_id=auth.uid()
+      and user_profile.user_id=owned_plan.user_id 
+      and role='user'
+    )
   )
 );
 
@@ -159,20 +163,44 @@ create policy "users can apply heir owned plan"
 on owned_plan
 for insert
 to authenticated
-with check (auth.uid() = user_id);
-
+with check (
+  auth.uid()=user_id or
+  exists(
+    select 1 
+    from user_profile
+    where user_profile.user_id=auth.uid()
+      and user_profile.user_id=owned_plan.user_id 
+      and role='user'
+  )
+);
 
 create policy "users can update their owned plan"
 on owned_plan
 for update 
 to authenticated
-with check (auth.uid() = user_id);
+with check (
+  exists(
+    select 1 
+    from user_profile
+    where user_profile.user_id=auth.uid()
+      and user_profile.user_id=owned_plan.user_id 
+      and role='user'
+  )
+);
 
 create policy "users can delete their owned plan"
 on owned_plan
 for delete
 to authenticated
-using (auth.uid() = user_id);
+using (
+  exists(
+    select 1 
+    from user_profile
+    where user_profile.user_id=auth.uid()
+      and user_profile.user_id=owned_plan.user_id 
+      and role='user'
+  )
+);
 
 --CREATE POLICY FOR 'user_storage_used' table--
 create policy "users can view their used storage"
@@ -181,10 +209,11 @@ for select
 to authenticated
 using (
   exists (
-    select 1
-    from user_storage_used us
-    join user_profile uf on us.user_id=uf.user_id 
-    where uf.user_id=auth.uid() and uf.role='user'
+    select 1 
+    from user_profile
+    where user_profile.user_id=auth.uid()
+      and user_profile.user_id=user_storage_used.user_id 
+      and role='user'
   )
 );
 
@@ -194,10 +223,10 @@ for select
 to authenticated
 using (
   exists (
-    select 1
-    from user_storage_used us
-    join user_profile uf on us.user_id=uf.user_id 
-    where uf.user_id=auth.uid() and uf.role='admin'
+    select 1 
+    from user_profile
+    where user_profile.user_id=auth.uid()
+      and role='admin'
   )
 );
 
@@ -207,10 +236,11 @@ for insert
 to authenticated
 with check (
   exists (
-    select 1
-    from user_storage_used us
-    join user_profile uf on us.user_id=uf.user_id
-    where uf.user_id=auth.uid() and uf.role='user'
+    select 1 
+    from user_profile
+    where user_profile.user_id=auth.uid()
+      and user_profile.user_id=user_storage_used.user_id 
+      and role='user'
   )
 );
 
@@ -220,10 +250,11 @@ for update
 to authenticated
 with check (
   exists (
-    select 1
-    from user_storage_used us
-    join user_profile uf on us.user_id=uf.user_id
-    where uf.user_id=auth.uid() and uf.role='user'
+    select 1 
+    from user_profile
+    where user_profile.user_id=auth.uid()
+      and user_profile.user_id=user_storage_used.user_id 
+      and role='user'
   )
 );
 
@@ -233,10 +264,11 @@ for delete
 to authenticated
 using (
   exists (
-    select 1
-    from user_storage_used us
-    join user_profile uf on us.user_id=uf.user_id
-    where uf.user_id=auth.uid() and uf.role='user'
+    select 1 
+    from user_profile
+    where user_profile.user_id=auth.uid()
+      and user_profile.user_id=user_storage_used.user_id 
+      and role='user'
   )
 );
 
@@ -249,10 +281,10 @@ to authenticated
 using (
   exists (
     select 1 
-    from user_profile uf 
-    join folders f
-    on f.created_by = uf.user_id
-    where uf.user_id=auth.uid() and uf.role='user'
+    from user_profile
+    where user_profile.user_id=auth.uid()
+      and user_profile.user_id=folders.created_by 
+      and role='user'
   )
 );
 
@@ -263,10 +295,10 @@ to authenticated
 with check (
   exists (
     select 1 
-    from user_profile uf 
-    join folders f
-    on f.created_by = uf.user_id
-    where uf.user_id=auth.uid() and uf.role='user'
+    from user_profile
+    where user_profile.user_id=auth.uid()
+      and user_profile.user_id=folders.created_by
+      and role='user'
   )
 );
 
@@ -277,10 +309,10 @@ to authenticated
 with check (
   exists (
     select 1 
-    from user_profile uf 
-    join folders f
-    on f.created_by = uf.user_id
-    where uf.user_id=auth.uid() and uf.role='user'
+    from user_profile
+    where user_profile.user_id=auth.uid()
+      and user_profile.user_id=folders.created_by
+      and role='user'
   )
 );
 
@@ -291,10 +323,10 @@ to authenticated
 using (
   exists (
     select 1 
-    from user_profile uf 
-    join folders f
-    on f.created_by = uf.user_id
-    where uf.user_id=auth.uid() and uf.role='user'
+    from user_profile
+    where user_profile.user_id=auth.uid()
+      and user_profile.user_id=folders.created_by
+      and role='user'
   )
 );
 
@@ -306,12 +338,10 @@ to authenticated
 using (
   exists (
     select 1 
-    from user_profile uf 
-    join folders f
-    on f.created_by = uf.user_id
-    join files fi
-    on fi.folder_id = f.folder_id
-    where uf.user_id=auth.uid() and uf.role='user'
+    from user_profile
+    where user_profile.user_id=auth.uid()
+      and user_profile.user_id=files.created_by
+      and role='user'
   )
 );
 
@@ -322,12 +352,10 @@ to authenticated
 with check (
   exists (
     select 1 
-    from user_profile uf 
-    join folders f
-    on f.created_by = uf.user_id
-    join files fi
-    on fi.folder_id = f.folder_id
-    where uf.user_id=auth.uid() and uf.role='user'
+    from user_profile
+    where user_profile.user_id=auth.uid()
+      and user_profile.user_id=files.created_by
+      and role='user'
   )
 );
 
@@ -338,12 +366,10 @@ to authenticated
 with check (
   exists (
     select 1 
-    from user_profile uf 
-    join folders f
-    on f.created_by = uf.user_id
-    join files fi
-    on fi.folder_id = f.folder_id
-    where uf.user_id=auth.uid() and uf.role='user'
+    from user_profile
+    where user_profile.user_id=auth.uid()
+      and user_profile.user_id=files.created_by
+      and role='user'
   )
 );
 
@@ -354,12 +380,10 @@ to authenticated
 using (
   exists (
     select 1 
-    from user_profile uf 
-    join folders f
-    on f.created_by = uf.user_id
-    join files fi
-    on fi.folder_id = f.folder_id
-    where uf.user_id=auth.uid() and uf.role='user'
+    from user_profile
+    where user_profile.user_id=auth.uid()
+      and user_profile.user_id=files.created_by
+      and role='user'
   )
 );
 
