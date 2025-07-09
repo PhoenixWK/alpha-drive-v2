@@ -13,24 +13,9 @@ const righteousFont = localFont({
 export default function LoginPage() {
 
   return (
-        <div className="flex min-h-screen dark:bg-[#171725]">
-            <div className="hidden lg:flex lg:w-1/2 items-center justify-center bg-[#FBFAFF] dark:bg-[#19192C]">
-                <div className="p-8">
-                    <Image 
-                        src="/images/login-illustration.svg" 
-                        alt="Login illustration" 
-                        width={400} 
-                        height={400}
-                        priority
-                        placeholder="blur"
-                        blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+PC9zdmc+"
-                        sizes="(max-width: 1024px) 0px, 400px"
-                        className="max-w-full h-auto"
-                    />
-                </div>
-            </div>
-            <div className="w-full lg:w-1/2 flex flex-col p-8 md:p-12 lg:p-16">
-                <div className="mb-12">
+        <div className="flex min-h-screen dark:bg-[#171725]">  
+            <div className="w-full flex flex-col p-8 md:p-12 lg:p-16">
+               <div className="mb-12">
                     <Link href="/" className="w-fit flex items-center gap-3">
                         <div>
                         <Image 
@@ -42,7 +27,7 @@ export default function LoginPage() {
                         </div>
                         <span className={`text-xl font-medium text-[#364670] dark:text-white ${righteousFont.className}`}>Alpha Drive</span>
                     </Link>
-                </div>
+                </div> 
             <div className="max-w-md mx-auto w-full">
                 <div className="mb-8">
                     <h1 className="text-2xl md:text-3xl font-bold text-[#364670] dark:text-white mb-2">

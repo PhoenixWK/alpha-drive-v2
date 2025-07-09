@@ -25,19 +25,7 @@ async function VerifyEmailContent({ searchParams }: { searchParams: Promise<{ em
   };
   return (
     <div className="flex min-h-screen dark:bg-[#171725]">
-      <div className="hidden lg:flex lg:w-1/2 items-center justify-center bg-[#FBFAFF] dark:bg-[#19192C]">
-        <div className="p-8">
-          <Image 
-            src="/images/login-illustration.svg" 
-            alt="Email verification illustration" 
-            width={400} 
-            height={400}
-            priority
-            className="max-w-full h-auto"
-          />
-        </div>
-      </div>
-      <div className="w-full lg:w-1/2 flex flex-col p-8 md:p-12 lg:p-16">
+      <div className="w-full flex flex-col p-8">
         <div className="mb-12">
           <Link href="/" className="w-fit flex items-center gap-3">
             <div>

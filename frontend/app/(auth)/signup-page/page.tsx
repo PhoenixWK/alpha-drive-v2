@@ -14,20 +14,8 @@ const righteousFont = localFont({
 export default function SignupPage() {
   
   return (
-    <div className="flex min-h-screen dark:bg-[#171725]">
-        <div className="p-8 hidden lg:flex lg:w-1/2 flex-col bg-[#FBFAFF] dark:bg-[#19192C]">
-          <div className="p-8 flex items-center justify-center">
-              <Image 
-                  src="/images/login-illustration.svg" 
-                  alt="Login illustration" 
-                  width={400} 
-                  height={400}
-                  priority
-              />
-          </div>
-        </div>
-      
-      <div className="w-full lg:w-1/2 flex flex-col p-8 md:p-12 lg:p-16">
+    <div className="flex min-h-screen dark:bg-[#171725]">     
+      <div className="w-full flex flex-col p-8">
         <div className="mb-12">
           <Link href="/" className="w-fit flex items-center gap-3">
             <div>
