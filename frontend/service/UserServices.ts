@@ -111,11 +111,13 @@ export default async function updateUserPasswordService(formData: FormData) {
     try {
         const result = await updateUserPassword(newPassword);
         if (result?.error) {
-            return { error: result.error.message || "Failed to update password" };
+            console.log(result.error)
+            return {  error: result.error.message || "Failed to update password" };
         }
 
         return { success: true, message: "Password updated successfully", redirectTo: '/login-page' };
     } catch (error) {
+        console.log(error)
         return { error: "An unexpected error occurred. Please try again." };
     }
 }
