@@ -10,7 +10,7 @@ export default function PageLayout({ children }: { children: React.ReactNode }) 
             <div className="w-full flex flex-col h-screen">
                 <div className="fixed top-0 left-0 w-screen h-fit shadow-lg xl:shadow-none px-2 md:px-4 xl:px-6 xl:pl-[280px] py-4 xl:py-6">
                     <Header />
-                </div>       
+                </div>   
                 <main className="flex flex-col h-screen px-6">     
                     {children}
                 </main>

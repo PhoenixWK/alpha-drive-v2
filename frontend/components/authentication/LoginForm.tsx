@@ -2,13 +2,15 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {  useState } from "react";
+import {  useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 
 import { Eye, EyeOff } from "lucide-react";
 import { createDefaultUserProfileService, signInWithEmailAndPasswordService } from "@/service/UserServices";
 import { Toast, ToastContainer } from "../ui/toast";
 import { useToast } from "@/hooks/useToast";
+import { createClient } from "@/lib/supabase/client";
+import { useUserStore } from "@/store/useUserStore";
 
 export default function LoginForm() {
 
@@ -16,6 +18,20 @@ export default function LoginForm() {
     const [isLoading, setIsLoading] = useState(false);
     const { toast, showError, showSuccess, removeToast } = useToast();
     const router = useRouter();
+    const setUser = useUserStore((state) => state.setUser);
+
+    useEffect(() => {
+        const supabase = createClient();
+        
+        const {data: {subscription}} = supabase.auth.onAuthStateChange((event, session) => {
+            if(event === 'SIGNED_IN') {
+                // User is signed in, you can handle the session here
+                
+                setUser(session?.user || null);
+            }
+        });
+        return () => subscription.unsubscribe()
+    }, [])
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();

@@ -19,6 +19,7 @@ export default function Sidebar() {
 
     const pathname = usePathname();
 
+
     return (
         <aside className="w-64 h-full bg-[#F8F6FF] dark:bg-[#1B1A30] px-6 py-8 xl:flex flex-col items-center justify-between">
             <div className="space-y-10">

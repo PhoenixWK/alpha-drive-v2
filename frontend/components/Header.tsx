@@ -4,13 +4,12 @@ import { Button } from "./ui/button";
 import Image from "next/image";
 import localFont from "next/font/local";
 import { IoMenu } from "react-icons/io5";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Sidebar from "./Sidebar";
 import SwitchThemeBtn from "./SwitchThemeBtn";
 import Link from "next/link";
-import { User } from "@supabase/supabase-js";
 import UserProfileMenu from "./user-profile/UserProfileMenu";
-import { getUserService } from "@/service/UserServices";
+import { useUserStore } from "@/store/useUserStore";
 
 
 const righteousFont = localFont({
@@ -20,15 +19,7 @@ const righteousFont = localFont({
 export default function Header() {
 
     const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
-    const [user, setUser] = useState<User | null>(null);
-
-    useEffect(() => {
-        const fetchUser = async () => {
-            const user = await getUserService();
-            setUser(user);
-        }
-        fetchUser();
-    }, [])
+    const user = useUserStore((state) => state.user);
 
     return (
         <>

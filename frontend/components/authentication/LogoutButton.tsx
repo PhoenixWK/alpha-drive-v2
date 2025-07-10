@@ -5,6 +5,7 @@ import { useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { logoutService } from '@/service/UserServices'
+import { useUserStore } from '@/store/useUserStore'
 
 interface LogoutButtonProps {
   children: React.ReactNode
@@ -15,6 +16,7 @@ interface LogoutButtonProps {
 export default function LogoutButton({ children, className, onClick }: LogoutButtonProps) {
     const router = useRouter()
     const supabase = createClient()
+    const clearUser = useUserStore((state) => state.clearUser);
 
     useEffect(() => {
         const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
@@ -25,6 +27,7 @@ export default function LogoutButton({ children, className, onClick }: LogoutBut
                         storage.removeItem(key)
                     })
                 })
+                clearUser()
             }
         })
 
