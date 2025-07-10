@@ -11,6 +11,7 @@ import { Toast, ToastContainer } from "../ui/toast";
 import { useToast } from "@/hooks/useToast";
 import { createClient } from "@/lib/supabase/client";
 import { useUserStore } from "@/store/useUserStore";
+import { User } from "@supabase/supabase-js";
 
 export default function LoginForm() {
 
@@ -26,8 +27,7 @@ export default function LoginForm() {
         const {data: {subscription}} = supabase.auth.onAuthStateChange((event, session) => {
             if(event === 'SIGNED_IN') {
                 // User is signed in, you can handle the session here
-                
-                setUser(session?.user || null);
+                setUser(session?.user as User);
             }
         });
         return () => subscription.unsubscribe()

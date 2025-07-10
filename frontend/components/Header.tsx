@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 import Image from "next/image";
 import localFont from "next/font/local";
 import { IoMenu } from "react-icons/io5";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import SwitchThemeBtn from "./SwitchThemeBtn";
 import Link from "next/link";
@@ -19,6 +19,16 @@ const righteousFont = localFont({
 export default function Header() {
 
     const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+    /*const [user, setUser] = useState<User | null>(null)
+
+    useEffect(() => {
+        const getUser = async () => {
+                const user = await getUserService();
+                setUser(user || null);
+        }
+        getUser();
+    }, [])*/
+
     const user = useUserStore((state) => state.user);
 
     return (

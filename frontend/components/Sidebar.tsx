@@ -19,6 +19,48 @@ export default function Sidebar() {
 
     const pathname = usePathname();
 
+    if(pathname.includes("/setting-page")){
+        return (
+            <aside className="w-64 h-full bg-[#F8F6FF] dark:bg-[#1B1A30] px-6 py-8 xl:flex flex-col items-center justify-between">
+                <div className="space-y-10">
+                    <div className="flex flex-row items-center justify-center gap-4">
+                        <Image 
+                            src="/logo.png" 
+                            alt="logo" 
+                            width={48} 
+                            height={48}
+                            priority={true} 
+                            className="w-auto h-auto"
+                        />
+                        <h1 className={`${righteousFont.className} text-2xl font-bold dark:text-white`}>Alpha Drive</h1>
+                    </div>
+                    <nav className="flex flex-col gap-4">
+                        <Link
+                            href="/"
+                            className={`px-8 py-4 rounded-lg flex flex-row items-center gap-4 cursor-pointer transition-all duration-300 ${pathname === "/" ? "bg-[#6A4BFF] text-white" : "text-black dark:text-white hover:bg-[#cac2f8] dark:hover:bg-[#242038]"}`}
+                        >
+                            <p className="text-black dark:text-white text-xl font-bold">Back to home</p>
+                        </Link>
+                        <Link
+                            href="/setting-page/my-profile"
+                            className={`px-8 py-4 rounded-lg flex flex-row items-center gap-4 cursor-pointer transition-all duration-300 ${pathname === "/" ? "bg-[#6A4BFF] text-white" : "text-black dark:text-white hover:bg-[#cac2f8] dark:hover:bg-[#242038]"}`}
+                        >
+                            <p className={`${pathname.includes("/setting-page/my-profile") ? "text-[#6A4BFF]" : "text-black dark:text-white"} text-xl font-bold`}>My Profile</p>
+                        </Link>
+                        <Link
+                            href="/setting-page/security-page"
+                            className={`px-8 py-4 rounded-lg flex flex-row items-center gap-4 cursor-pointer  transition-all duration-300 ${pathname === "/shared-page" ? "bg-[#6A4BFF] text-white" : "text-black dark:text-white hover:bg-[#cac2f8] dark:hover:bg-[#242038]"}`}
+                        >
+                            <p className={`${pathname === "/setting-page/security-page" ? "text-[#6A4BFF]" : "text-black dark:text-white"} text-xl font-bold`}>Security</p>
+                        </Link>
+                    </nav>
+                </div>
+                <div className="hidden xl:block">
+                    <SwitchThemeBtn />
+                </div>
+            </aside>
+        )
+    }
 
     return (
         <aside className="w-64 h-full bg-[#F8F6FF] dark:bg-[#1B1A30] px-6 py-8 xl:flex flex-col items-center justify-between">

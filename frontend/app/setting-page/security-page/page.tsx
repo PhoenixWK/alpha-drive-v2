@@ -1,9 +1,10 @@
 import PageLayout from "@/components/PageLayout";
 
-export default function MyProfilePage() {
+
+export default function SecurityPage() {
     return (
         <PageLayout>
-            This is the My Profile page.
+            This is the Security page.
         </PageLayout>
     );
 }
