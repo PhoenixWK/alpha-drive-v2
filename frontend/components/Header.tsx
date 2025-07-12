@@ -11,7 +11,6 @@ import Link from "next/link";
 import UserProfileMenu from "./user-profile/UserProfileMenu";
 import { useUserStore } from "@/store/useUserStore";
 
-
 const righteousFont = localFont({
     src: "../public/fonts/Righteous-Regular.ttf",
 });

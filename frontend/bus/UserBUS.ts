@@ -16,3 +16,9 @@ export function validatePassword(password: string): boolean {
 export function validateConfirmPassword(password: string, confirmPassword: string): boolean {
     return password === confirmPassword;
 }
+
+export function getUserNameFromEmail(email: string): string {
+    // Extract the part before the '@' symbol and replace '.' with ' '
+    const namePart = email.split('@')[0];
+    return namePart.replace(/\./g, ' ');
+}

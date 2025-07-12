@@ -6,12 +6,13 @@ import {  useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 
 import { Eye, EyeOff } from "lucide-react";
-import { createDefaultUserProfileService, signInWithEmailAndPasswordService } from "@/service/UserServices";
+import { createDefaultUserProfileService, createDefaultUserStorageService, signInWithEmailAndPasswordService } from "@/service/UserServices";
 import { Toast, ToastContainer } from "../ui/toast";
 import { useToast } from "@/hooks/useToast";
 import { createClient } from "@/lib/supabase/client";
 import { useUserStore } from "@/store/useUserStore";
 import { User } from "@supabase/supabase-js";
+import { getUserNameFromEmail } from "@/bus/UserBUS";
 
 export default function LoginForm() {
 
@@ -62,6 +63,26 @@ export default function LoginForm() {
         } catch (error) {
             console.error('Profile creation error:', error);
             showError("Profile setup failed, but login was successful.", 4000);
+        }
+
+        const imageUrl = "/user-profile.png"
+        const folderName = getUserNameFromEmail(formData.get("email") as string);
+        const response = await fetch(imageUrl);
+        const blob = await response.blob();
+        const file = new File([blob], 'avatar.png', { type: blob.type });
+
+        try {
+            const storageResponse = await createDefaultUserStorageService(folderName, file);
+            if (storageResponse?.error && storageResponse.data === null) {
+                console.error('Storage creation error:');
+                showError("Failed to set up user storage.", 4000);
+            }else if (storageResponse?.data) {
+                console.log('User storage already exists:');
+            }else {
+                showSuccess("User storage set up successfully!", 3000);
+            }
+        }catch (error) {
+            console.error('Unexpected error during storage setup:', error); 
         }
         
         setIsLoading(false);

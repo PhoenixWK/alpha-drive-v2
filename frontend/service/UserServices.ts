@@ -1,6 +1,6 @@
 'use server'
 
-import { checkExistingUserProfile, createDefaultUserProfile, getUser, logout, resetPasswordForEmail, signInWithEmailAndPassword, signUp, updateUserPassword } from "@/dao/UserDAO";
+import { checkExistingUserProfile, checkExistingUserStorage, createDefaultUserProfile, createDefaultUserStorage, getUser, logout, resetPasswordForEmail, signInWithEmailAndPassword, signUp, updateUserPassword } from "@/dao/UserDAO";
 
 
 export async function signInWithEmailAndPasswordService(formData: FormData) {
@@ -169,5 +169,30 @@ export async function createDefaultUserProfileService() {
     } catch (error) {
         console.error('Unexpected error in createDefaultUserProfileService:', error);
         return { error: "An unexpected error occurred while setting up your profile." };
+    }
+}
+
+export async function createDefaultUserStorageService(folderName: string, file: File) {
+    try {
+        const checkExistingUserStorageResponse = await checkExistingUserStorage(folderName);
+
+        if(checkExistingUserStorageResponse.error) {
+            console.error('Error checking existing user profile:', checkExistingUserStorageResponse.error);
+            return { error: checkExistingUserStorageResponse.error.message || "An error occurred while checking your storage." };
+        }
+
+        if(checkExistingUserStorageResponse.data != undefined && checkExistingUserStorageResponse.data?.length > 0) {
+            console.log('User storage already exists for folder:', folderName);
+            return {data: "User storage already exists. No need to create again."};
+        }
+
+        const createStorageResponse = await createDefaultUserStorage(folderName, file);
+        if(createStorageResponse.error) {
+            console.error('Error creating user storage:', createStorageResponse.error);
+            return { error: createStorageResponse.error.message || "An error occurred while creating your storage." };
+        }
+    }catch (error) {  
+        console.error('Unexpected error in createDefaultUserStorageService:', error);
+        return { error: "An unexpected error occurred while setting up your storage." };
     }
 }

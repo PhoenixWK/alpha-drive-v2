@@ -169,3 +169,46 @@ export async function createDefaultUserProfile(user_id: string, email: string) {
         
     return { data, error };  
 }
+
+export async function createDefaultUserStorage(folderName: string, file: File) {
+    const supabase = await createClient();
+    
+    console.log('Creating default user storage with folder:', folderName);
+    
+    const { data, error } = await supabase.storage.from('alpha-drive').upload(`${folderName}/user-profile-image/${file.name}`, file, {
+        cacheControl: '3600',
+        upsert: true
+    });
+
+    if (error) {
+        console.error('Error creating user storage:', error);
+    } else {
+        console.log('User storage created successfully:', data);
+    }
+
+    return { data, error };
+}
+
+
+export async function checkExistingUserStorage(
+    folderName: string
+): Promise<{ 
+    data: FileObject[] | null; 
+    error: any | null;
+}> {
+    const supabase = await createClient();
+    
+    const { data, error } = await supabase.storage.from('alpha-drive').list(folderName, {
+        limit: 1,
+        offset: 0,
+        sortBy: { column: 'name', order: 'asc' }
+    });
+
+    if (error) {
+        console.error('Error checking user storage:', error);
+    } else {
+        console.log('User storage check result:', data);
+    }
+
+    return { data, error };
+}
