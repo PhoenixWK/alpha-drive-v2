@@ -9,7 +9,6 @@ import { Eye, EyeOff } from "lucide-react";
 import { createDefaultUserProfileService, createDefaultUserStorageService, signInWithEmailAndPasswordService } from "@/service/UserServices";
 import { Toast, ToastContainer } from "../ui/toast";
 import { useToast } from "@/hooks/useToast";
-import { createClient } from "@/lib/supabase/client";
 import { useUserStore } from "@/store/useUserStore";
 import { User } from "@supabase/supabase-js";
 import { getUserNameFromEmail } from "@/bus/UserBUS";
@@ -22,7 +21,7 @@ export default function LoginForm() {
     const router = useRouter();
     const setUser = useUserStore((state) => state.setUser);
 
-    useEffect(() => {
+    /*useEffect(() => {
         const supabase = createClient();
         
         const {data: {subscription}} = supabase.auth.onAuthStateChange((event, session) => {
@@ -32,7 +31,7 @@ export default function LoginForm() {
             }
         });
         return () => subscription.unsubscribe()
-    }, [])
+    }, [])*/
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -45,7 +44,9 @@ export default function LoginForm() {
             showError(result.error || "An error occurred during login.", 4000);
             setIsLoading(false);
             return; // Return early on error
-        } 
+        } else {
+            setUser(result.user as User);
+        }
 
         // Only create profile after successful login
         try {
@@ -65,6 +66,7 @@ export default function LoginForm() {
             showError("Profile setup failed, but login was successful.", 4000);
         }
 
+        //create default user storage based on default avatar
         const imageUrl = "/user-profile.png"
         const folderName = getUserNameFromEmail(formData.get("email") as string);
         const response = await fetch(imageUrl);

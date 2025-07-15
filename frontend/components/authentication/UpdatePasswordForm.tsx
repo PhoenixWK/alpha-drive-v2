@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation";
 import updateUserPasswordService from "@/service/UserServices";
 import { Toast, ToastContainer } from "../ui/toast";
 import { createClient } from "@/lib/supabase/client";
-import { useUserStore } from "@/store/useUserStore";
 
 export default function UpdatePasswordForm() {
 
@@ -17,7 +16,6 @@ export default function UpdatePasswordForm() {
     const [password, setPassword] = useState<string>("");
     const [isLoading, setIsLoading] = useState(false);
     const { toast, showError, showSuccess, removeToast } = useToast();
-    const setUser = useUserStore((state) => state.setUser);
 
     useEffect(() => {
         const supabase = createClient();
@@ -34,7 +32,6 @@ export default function UpdatePasswordForm() {
                                 router.push('/recovery/enter-email');
                             }, 6000);
                         } else {
-                            setUser(session?.user || null);
                             console.log('Password reset session established successfully');
                             showSuccess('Token verified successfully. You can now update your password.');
                         }

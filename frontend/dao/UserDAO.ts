@@ -37,7 +37,10 @@ export async function signUp(email: string, password: string) {
         email: email,
         password: password,
         options: {
-            emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}`
+            emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}`,
+            data: {
+                username: email.split('@')[0] // Default username from email
+            }
         }
     });
 
@@ -157,6 +160,7 @@ export async function createDefaultUserProfile(user_id: string, email: string) {
         .insert({
             user_id: user_id,
             email: email,
+            username: email.split('@')[0], // Default username from email
             role: 'user' // Explicitly set the role
         })
         .select() // Return the inserted data
@@ -212,3 +216,22 @@ export async function checkExistingUserStorage(
 
     return { data, error };
 }
+
+
+//This function retrieves the public URL of a file stored in Supabase storage
+export async function createSignedUrlForPrivateAsset(relativePath: string, exprireIn: number)
+: Promise<{ 
+    data: { signedUrl: string } | null;
+    error: any | null 
+}> {
+    const supabase = await createClient();
+    
+    const { data, error } = await supabase.storage.from('alpha-drive').createSignedUrl(relativePath, exprireIn);
+
+    if (error) {
+        console.log(error);
+        return {data: null, error};
+    }
+
+    return {data, error}
+} 

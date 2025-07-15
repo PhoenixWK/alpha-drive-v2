@@ -15,7 +15,7 @@ import {
 import LogoutButton from "../authentication/LogoutButton"
 
 
-export default function UserProfileMenu({user}: {user: User | null}) {
+export default function UserProfileMenu({user}: {user: UserProfile | null}) {
     if (!user) {
         return null;
     }

@@ -1,6 +1,7 @@
 'use server'
 
-import { checkExistingUserProfile, checkExistingUserStorage, createDefaultUserProfile, createDefaultUserStorage, getUser, logout, resetPasswordForEmail, signInWithEmailAndPassword, signUp, updateUserPassword } from "@/dao/UserDAO";
+import { checkExistingUserProfile, checkExistingUserStorage, createDefaultUserProfile, createDefaultUserStorage, createSignedUrlForPrivateAsset, getUser, logout, resetPasswordForEmail, signInWithEmailAndPassword, signUp, updateUserPassword } from "@/dao/UserDAO";
+
 
 
 export async function signInWithEmailAndPasswordService(formData: FormData) {
@@ -23,6 +24,7 @@ export async function signInWithEmailAndPasswordService(formData: FormData) {
             // Return success with redirect URL instead of redirecting
             return { 
                 success: result.success,  
+                user: result.user,
             };
         }
 
@@ -194,5 +196,31 @@ export async function createDefaultUserStorageService(folderName: string, file: 
     }catch (error) {  
         console.error('Unexpected error in createDefaultUserStorageService:', error);
         return { error: "An unexpected error occurred while setting up your storage." };
+    }
+}
+
+export async function getUserProfileImageLinkService(relativePath: string, expiredIn: number) {
+    try {
+        const userProfileImageLinkResponse = await createSignedUrlForPrivateAsset(relativePath, expiredIn);
+
+        if (userProfileImageLinkResponse.error) {
+            console.error('Error retrieving user profile image link:', userProfileImageLinkResponse.error);
+            return { error: userProfileImageLinkResponse.error.message || "An error occurred while retrieving your profile image link." };
+        } else if(userProfileImageLinkResponse.data?.signedUrl === undefined) {
+            return { 
+                success: false, 
+                signedUrl: undefined,
+                message: "No profile image found. Using default image."
+            };
+        } else {
+            return { 
+                success: true, 
+                signedUrl: userProfileImageLinkResponse.data?.signedUrl,
+                message: "Profile image link retrieved successfully." 
+            };
+        }
+    }catch (error) {
+        console.error('Unexpected error in getUserProfileImageLinkService:', error);
+        return { error: "An unexpected error occurred while retrieving your profile image link." };
     }
 }

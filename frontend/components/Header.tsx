@@ -1,7 +1,5 @@
 "use client";
 
-import { Button } from "./ui/button";
-import Image from "next/image";
 import localFont from "next/font/local";
 import { IoMenu } from "react-icons/io5";
 import { useEffect, useState } from "react";
@@ -9,6 +7,7 @@ import Sidebar from "./Sidebar";
 import SwitchThemeBtn from "./SwitchThemeBtn";
 import Link from "next/link";
 import UserProfileMenu from "./user-profile/UserProfileMenu";
+import { getUserService } from "@/service/UserServices";
 import { useUserStore } from "@/store/useUserStore";
 
 const righteousFont = localFont({
@@ -18,17 +17,17 @@ const righteousFont = localFont({
 export default function Header() {
 
     const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
-    /*const [user, setUser] = useState<User | null>(null)
+    //const [user, setUser] = useState<User | null>(null);
+    const userStore = useUserStore((state) => state.user);
+    const setUserStore = useUserStore((state) => state.setUser);
 
     useEffect(() => {
         const getUser = async () => {
-                const user = await getUserService();
-                setUser(user || null);
+            const user = await getUserService();
+            setUserStore(user);
         }
         getUser();
-    }, [])*/
-
-    const user = useUserStore((state) => state.user);
+    }, []);
 
     return (
         <>
@@ -49,17 +48,6 @@ export default function Header() {
                         placeholder="Search" 
                         className="min-w-3xl h-full rounded-lg px-4 py-4 bg-[#F8F6FF] dark:bg-[#1D2335] text-xl focus:outline-none border-2 dark:border-transparent focus:border-[#6A4BFF] dark:focus:border-[#6A4BFF] dark:text-white" 
                     />
-                    <Button className="py-8 px-4 rounded-lg bg-[#6A4BFF]">
-                        <div className="flex flex-row items-center justify-center">
-                            <Image
-                                src="/filter.png"
-                                alt="filter"
-                                width={32}
-                                height={32}
-                                className="w-auto h-auto"
-                            />
-                        </div>
-                    </Button>
                 </div>
                 <div className="xl:hidden flex flex-row items-center justify-center gap-2">
                     <button 
@@ -80,8 +68,8 @@ export default function Header() {
                     <div className="xl:hidden">
                         <SwitchThemeBtn />
                     </div>
-                    {user ? (
-                        <UserProfileMenu user={user} />
+                    {userStore ? (
+                        <UserProfileMenu user={userStore} />
                     ) : (
                         <button 
                             onClick={(e: React.MouseEvent<HTMLButtonElement>) => {

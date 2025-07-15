@@ -8,3 +8,12 @@ type FileObject = {
     last_accessed_at: string | null;
     metadata: Record<string, any> | null;
 };
+
+type UserProfile = {
+    email: string;
+    username: string;
+    role: 'user';
+    created_at: string;
+    updated_at: string;
+    profile_image_url?: string;
+}
