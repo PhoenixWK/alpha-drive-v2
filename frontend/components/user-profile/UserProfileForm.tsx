@@ -19,12 +19,13 @@ export default function UserProfileForm() {
                     name="username"
                     type="text"
                     placeholder={userStore?.username || "Enter your username"}
-                    className="w-full px-4 py-3 dark:bg-[#1D2335] dark:text-white rounded-md border-2 focus:border-[#6A4BFF] dark:focus:border-[#6A4BFF] focus:ring-0 focus:ring-offset-0"
+                    className="w-full px-4 py-3 disabled:bg-gray-500/25 dark:bg-[#1D2335] dark:text-white rounded-md border-2 dark:border-0 focus:border-[#6A4BFF] focus:ring-0 focus:ring-offset-0"
+                    disabled={true}
                 />
             </div>
             <div className="space-y-2">
                 <label htmlFor="email" className="block text-[#364670] dark:text-white font-semibold">
-                    Email (can't be changed)
+                    Email
                 </label>
                 <div className="relative">
                     <input
@@ -36,13 +37,6 @@ export default function UserProfileForm() {
                     />
                 </div>
             </div>
-            <Button 
-                type="submit" 
-                className="w-fit py-3 h-12 bg-[#6A4BFF] hover:bg-[#6A4BFF]/75 text-white font-semibold"
-                //disabled={isLoading}    
-            >
-                Save changes
-            </Button>
         </form>
     );
 }

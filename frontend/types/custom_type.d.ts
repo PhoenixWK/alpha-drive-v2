@@ -10,10 +10,12 @@ type FileObject = {
 };
 
 type UserProfile = {
+    user_id: string;
     email: string;
     username: string;
     role: 'user';
     created_at: string;
     updated_at: string;
     profile_image_url?: string;
+    owned_plan: string;
 }

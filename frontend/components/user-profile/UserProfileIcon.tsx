@@ -4,6 +4,7 @@ import { getUserProfileImageLinkService } from "@/service/UserServices";
 import { useUserStore } from "@/store/useUserStore";
 import Image from "next/image"
 import { useEffect, useState } from "react";
+import UserOwnedPlan from "./UserOwnedPlan";
 
 export default function UserProfileIcon() {
 
@@ -22,7 +23,7 @@ export default function UserProfileIcon() {
         <div className="flex flex-row gap-4">
             <div className="flex items-center justify-center w-28 h-28 rounded-md bg-gray-200 dark:bg-gray-700">
                 <Image 
-                    src={userProfileImageLink || "/default-avatar.png"}
+                    src={userProfileImageLink || "/user-profile.png"}
                     alt="User Avatar" 
                     className="w-full h-full object-cover"
                     width={192}
@@ -30,9 +31,12 @@ export default function UserProfileIcon() {
                     priority={true}
                 />
             </div>
-            <div className="text-center">
-                <p className="text-2xl font-semibold dark:text-white">{userStore?.username}</p>
-                <p className="text-gray-500 dark:text-gray-300">{userStore?.email}</p>
+            <div className="flex flex-col justify-between">
+                <div>
+                    <p className="text-4xl font-semibold dark:text-white">{userStore?.username}</p>
+                    <UserOwnedPlan />
+                </div>
+                <p className="text-sm font-semibold text-black dark:text-gray-300">Created at: {userStore?.created_at?.substring(0, 10)}</p>
             </div>
         </div>
     )

@@ -9,6 +9,7 @@ import Link from "next/link";
 import UserProfileMenu from "./user-profile/UserProfileMenu";
 import { getUserService } from "@/service/UserServices";
 import { useUserStore } from "@/store/useUserStore";
+import { usePathname } from "next/navigation";
 
 const righteousFont = localFont({
     src: "../public/fonts/Righteous-Regular.ttf",
@@ -20,6 +21,7 @@ export default function Header() {
     //const [user, setUser] = useState<User | null>(null);
     const userStore = useUserStore((state) => state.user);
     const setUserStore = useUserStore((state) => state.setUser);
+    const pathname = usePathname();
 
     useEffect(() => {
         const getUser = async () => {
@@ -43,11 +45,13 @@ export default function Header() {
             )}
             <header className="flex flex-row items-center justify-between">
                 <div className="hidden xl:flex flex-row items-center justify-center gap-4">
-                    <input 
-                        type="text" 
-                        placeholder="Search" 
-                        className="min-w-3xl h-full rounded-lg px-4 py-4 bg-[#F8F6FF] dark:bg-[#1D2335] text-xl focus:outline-none border-2 dark:border-transparent focus:border-[#6A4BFF] dark:focus:border-[#6A4BFF] dark:text-white" 
-                    />
+                    {pathname.includes("/setting-page/my-profile") !== true && (
+                        <input 
+                            type="text" 
+                            placeholder="Search" 
+                            className="min-w-3xl h-full rounded-lg px-4 py-4 bg-[#F8F6FF] dark:bg-[#1D2335] text-xl focus:outline-none border-2 dark:border-transparent focus:border-[#6A4BFF] dark:focus:border-[#6A4BFF] dark:text-white" 
+                        />
+                    )}
                 </div>
                 <div className="xl:hidden flex flex-row items-center justify-center gap-2">
                     <button 

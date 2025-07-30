@@ -10,6 +10,7 @@ import { BiSolidDashboard } from "react-icons/bi";
 import { IoMdShare } from "react-icons/io";
 import { FaRegStar } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { useUserStore } from "@/store/useUserStore";
 
 const righteousFont = localFont({
     src: "../public/fonts/Righteous-Regular.ttf",
@@ -18,6 +19,7 @@ const righteousFont = localFont({
 export default function Sidebar() {
 
     const pathname = usePathname();
+    const userStore = useUserStore((state) => state.user);
 
     if(pathname.includes("/setting-page")){
         return (
@@ -42,7 +44,7 @@ export default function Sidebar() {
                             <p className="text-black dark:text-white text-xl font-bold">Back to home</p>
                         </Link>
                         <Link
-                            href="/setting-page/my-profile"
+                            href={`/setting-page/my-profile/${userStore?.username}`}
                             className={`px-8 py-4 rounded-lg flex flex-row items-center gap-4 cursor-pointer transition-all duration-300 ${pathname === "/" ? "bg-[#6A4BFF] text-white" : "text-black dark:text-white hover:bg-[#cac2f8] dark:hover:bg-[#242038]"}`}
                         >
                             <p className={`${pathname.includes("/setting-page/my-profile") ? "text-[#6A4BFF]" : "text-black dark:text-white"} text-xl font-bold`}>My Profile</p>
