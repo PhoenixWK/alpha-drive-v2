@@ -15,14 +15,14 @@ export default function UserOwnedPlan() {
             if(userOwnedPlanResponse.error) {
                 console.error('Error fetching user owned plan:', userOwnedPlanResponse.error);
             } else {
-                updateUserOwnedPlan(userOwnedPlanResponse.data?.[0]?.plan_id);
+                updateUserOwnedPlan(userOwnedPlanResponse.data?.[0].plan_name);
             }
         }
         getUserOwnedPlan();
-    }, [])
+    }, [userStore?.owned_plan])
     
     return (
-        <div className="mt-2 w-fit px-2 bg-[#D5FFED] border-2 border-[#52FFB1] text-center text-[#05C47E] rounded-md">
+        <div className="mt-2 w-fit px-2 bg-[#D5FFED] dark:bg-[#7cffc6] border-2 border-[#52FFB1] text-center text-[#05C47E] rounded-sm">
             <p className="text-sm font-semibold">{userStore?.owned_plan || 'No plan'}</p>
         </div>
     )

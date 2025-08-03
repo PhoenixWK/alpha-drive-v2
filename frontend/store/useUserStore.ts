@@ -2,7 +2,7 @@ import { User } from "@supabase/supabase-js";
 import { create } from "zustand";
 
 type UserState = {
-    updateUserOwnedPlan: (user_id: string) => void;
+    updateUserOwnedPlan: (plan_name: string) => void;
     user: UserProfile| null;
     setUser: (newUser: User | null) => void;
     clearUser: () => void;
@@ -34,10 +34,10 @@ export const useUserStore = create<UserState>()((set, get) => ({
         const state = get();
         return state.user !== null;
     },
-    updateUserOwnedPlan: (plan_id: string) => {
+    updateUserOwnedPlan: (plan_name: string) => {
         const state = get();
         if(state.user) {
-            set({ user: { ...state.user, owned_plan: plan_id } });
+            set({ user: { ...state.user, owned_plan: plan_name } });
         }
     }
 }))
