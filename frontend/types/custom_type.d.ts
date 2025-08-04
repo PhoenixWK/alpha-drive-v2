@@ -19,3 +19,9 @@ type UserProfile = {
     profile_image_url?: string;
     owned_plan: string;
 }
+
+type UserStorageUsed = {
+    used_storage: number,
+    max_storage: number,
+    memory_unit: string,
+} | undefined
