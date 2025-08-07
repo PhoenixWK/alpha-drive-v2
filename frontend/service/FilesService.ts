@@ -1,8 +1,8 @@
 import { calculateFilesStorageUsed } from "@/dao/FilesDAO";
 
-export async function getCalculateFilesStorageUsedService(userId: string) {
+export async function getCalculateFilesStorageUsedService() {
     try {
-        const calculateFilesStorageUsedResponse = await calculateFilesStorageUsed(userId);
+        const calculateFilesStorageUsedResponse = await calculateFilesStorageUsed();
 
         if (calculateFilesStorageUsedResponse.error) {
             console.error('Error fetching storage used:', calculateFilesStorageUsedResponse.error);

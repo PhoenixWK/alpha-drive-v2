@@ -45,8 +45,8 @@ export default function UserProfileMenu({user}: {user: UserProfile | null}) {
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator className="my-2"/>
-                <DropdownMenuItem className="text-md dark:text-white dark:hover:bg-[#2d3242] font-semibold py-3">
-                    <LogoutButton>
+                <DropdownMenuItem className="text-md cursor-pointer dark:text-white dark:hover:bg-[#2d3242] font-semibold py-3">
+                    <LogoutButton className="w-full text-left">
                         Logout  
                     </LogoutButton>
                 </DropdownMenuItem>

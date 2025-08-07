@@ -5,6 +5,8 @@ import { useUserStorageUsed } from "@/store/useUserStorageUsed";
 import { useUserStore } from "@/store/useUserStore";
 import { useEffect, Suspense } from "react";
 import { MdStorage } from "react-icons/md";
+import StorageProgress from "./StorageProgress";
+import { convertStorageUnits } from "@/bus/UserStorageUsed";
 
 export default function StorageStatistic() {
 
@@ -21,7 +23,7 @@ export default function StorageStatistic() {
             }
         }
         fetchUserStorageUsed()
-    }, [])
+    }, [userStore, setUserStorageUsed]);
 
     return (
         <div className="p-4 bg-[#EEFEF8] dark:bg-[#2d825a] border-2 border-[#01C46C] rounded-sm">
@@ -37,9 +39,16 @@ export default function StorageStatistic() {
                 </div>
                 <Suspense>
                     <p className="text-lg dark:text-white font-semibold">
-                        {userStorageUsed?.used_storage || 0} / {userStorageUsed?.max_storage || 0}
+                        {convertStorageUnits(userStorageUsed?.used_storage as number, userStorageUsed?.memory_unit as string) || 0} / {userStorageUsed?.max_storage || 0} {userStorageUsed?.memory_unit}
                     </p>
                 </Suspense>
+            </div>
+            <div className="mt-2">
+                <StorageProgress 
+                    used_storage={userStorageUsed?.used_storage || 0} 
+                    max_storage={userStorageUsed?.max_storage || 0} 
+                    memory_unit={userStorageUsed?.memory_unit as string}
+                />
             </div>
         </div>
     )

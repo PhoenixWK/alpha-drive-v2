@@ -12,11 +12,7 @@ export default function UserOwnedPlan() {
     useEffect(() => {
         const getUserOwnedPlan = async () => {
             const userOwnedPlanResponse = await getUserOwnedPlanService(userStore?.user_id as string);
-            if(userOwnedPlanResponse.error) {
-                console.error('Error fetching user owned plan:', userOwnedPlanResponse.error);
-            } else {
-                updateUserOwnedPlan(userOwnedPlanResponse.data?.[0].plan_name);
-            }
+            updateUserOwnedPlan(userOwnedPlanResponse.data?.[0].plan_name);
         }
         getUserOwnedPlan();
     }, [userStore?.owned_plan])

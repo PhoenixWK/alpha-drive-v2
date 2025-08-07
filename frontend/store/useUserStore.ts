@@ -12,7 +12,6 @@ type UserState = {
 export const useUserStore = create<UserState>()((set, get) => ({
     user: null,
     setUser: (newUser: User | null) => {
-        console.log('Setting user in store:', newUser?.id || 'null');
         set({ 
             user: {
                 user_id: newUser?.id || '',

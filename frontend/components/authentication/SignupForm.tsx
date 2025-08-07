@@ -1,5 +1,6 @@
 "use client";
 
+
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -10,8 +11,11 @@ import { Toast, ToastContainer } from "@/components/ui/toast";
 import { validateConfirmPassword, validateEmail, validatePassword } from "@/bus/UserBUS";
 import { signUpService } from "@/service/UserServices";
 
+import { Eye, EyeOff } from "lucide-react";
+
 export default function SignupForm() {
     const [errorField, setErrorField] = useState<{field_error: string} | null>(null);
+    const [showPassword, setShowPassword] = useState({ show: false , field: ""});
     const [password, setPassword] = useState<string>("");
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
@@ -80,10 +84,11 @@ export default function SignupForm() {
                     <label htmlFor="password" className="block text-[#364670] dark:text-white font-semibold">
                         Password
                     </label>
-                    <input
+                    <div className="relative">
+                        <input
                         id="password"
                         name="password"
-                        type="password"
+                        type={showPassword.show && showPassword.field === "password" ? "text" : "password"}
                         placeholder="Password"
                         className={`w-full px-4 py-3 dark:bg-[#1D2335] dark:text-white rounded-md border-2 focus:ring-0 focus:ring-offset-0 ${
                             errorField?.field_error === "password" 
@@ -91,6 +96,9 @@ export default function SignupForm() {
                                 : "dark:border-0 focus:border-[#6A4BFF] border-gray-300"
                         }`}
                         required
+                        onCopy={(e) => e.preventDefault()}
+                        onCut={(e) => e.preventDefault()}
+                        onPaste={(e) => e.preventDefault()}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                             const password: string = e.target.value;
                             if(!validatePassword(password)) {
@@ -101,7 +109,15 @@ export default function SignupForm() {
                             }
                         }}
                         
-                    />
+                        />
+                        <button
+                            type="button"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#364670]"
+                            onClick={() => setShowPassword({ show: !showPassword.show, field: "password" })}
+                        >
+                            {showPassword.show && showPassword.field === "password" ? <EyeOff size={20} /> : <Eye size={20} />}
+                        </button>
+                    </div>
                     {errorField?.field_error === "password" && (
                         <p className="text-red-500 text-sm font-semibold mt-1">
                             Password must be at least 10 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.
@@ -112,10 +128,11 @@ export default function SignupForm() {
                     <label htmlFor="confirmPassword" className="block text-[#364670] dark:text-white font-semibold">
                         Confirm Password
                     </label>
-                    <input
+                    <div className="relative">
+                        <input
                         id="confirmPassword"
                         name="confirmPassword"
-                        type="password"
+                        type={showPassword.show && showPassword.field === "confirmPassword" ? "text" : "password"}
                         placeholder="Confirm Password"
                         className={`w-full px-4 py-3 dark:bg-[#1D2335] dark:text-white rounded-md border-2 focus:ring-0 focus:ring-offset-0 ${
                             errorField?.field_error === "confirm_password" 
@@ -123,6 +140,9 @@ export default function SignupForm() {
                                 : "dark:border-0 focus:border-[#6A4BFF] border-gray-300"
                         }`}
                         required
+                        onCopy={(e) => e.preventDefault()}
+                        onCut={(e) => e.preventDefault()}
+                        onPaste={(e) => e.preventDefault()}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                             let confirmPassword: string = e.target.value;
                             if(!validateConfirmPassword(confirmPassword, password)) {
@@ -131,7 +151,15 @@ export default function SignupForm() {
                                 setErrorField(null);
                             }
                         }}
-                    />
+                        />
+                         <button
+                            type="button"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#364670]"
+                            onClick={() => setShowPassword({ show: !showPassword.show, field: "confirmPassword" })}
+                        >
+                            {showPassword.show && showPassword.field === "confirmPassword" ? <EyeOff size={20} /> : <Eye size={20} />}
+                        </button>
+                    </div>
                         {errorField?.field_error === "confirm_password" && (
                             <p className="text-red-500 text-sm font-semibold mt-1">
                                 Passwords do not match.

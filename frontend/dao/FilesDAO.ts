@@ -2,7 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 
-export async function calculateFilesStorageUsed(userId: string) {
+export async function calculateFilesStorageUsed() {
     const supabase = await createClient();
 
     const { count, error } = await supabase

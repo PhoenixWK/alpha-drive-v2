@@ -1,18 +1,16 @@
 "use client";
 
 import { getCalculateFilesStorageUsedService } from "@/service/FilesService";
-import { useUserStore } from "@/store/useUserStore";
 import { useEffect, useState } from "react";
 import { FaFileAlt } from "react-icons/fa";
 
 export default function StorageStatistic() {
     
-    const userStore = useUserStore((state) => state.user);
     const [fileCount, setFileCount] = useState<number>(0);
 
     useEffect(() => {
         const getFileCount = async () => {
-            const countResponse = await getCalculateFilesStorageUsedService(userStore?.user_id as string);
+            const countResponse = await getCalculateFilesStorageUsedService();
             setFileCount(countResponse);
         }
         getFileCount();
